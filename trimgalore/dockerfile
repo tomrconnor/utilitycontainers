@@ -1,1 +1,26 @@
+FROM centos
+MAINTAINER Tom Connor <connortr@cardiff.ac.uk>
+LABEL Description "Container for running TrimGalore, on Centos"
 
+# Run updates
+RUN yum -y update
+RUN yum clean all
+RUN yum install -y wget unzip python java-1.6.0-openjdk.x86_64 python-pip
+
+# Install trim-galore
+RUN wget https://github.com/FelixKrueger/TrimGalore/archive/0.4.5.zip && \
+        unzip trim_galore_v0.4.5.zip
+ENV PATH /trim_galore_zip:$PATH
+
+# Install cutadapt
+RUN pip install cutadapt
+
+# Install fastqc
+RUN wget https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.7.zip && \
+        unzip fastqc_v0.11.5.zip && \
+        cd FastQC && \
+        chmod a+x fastqc
+ENV PATH /FastQC:$PATH
+
+ENTRYPOINT ["trim_galore"]
+CMD ["-h"]
