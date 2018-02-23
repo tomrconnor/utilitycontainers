@@ -1,1 +1,19 @@
+FROM centos
+MAINTAINER Tom Connor <connortr@cardiff.ac.uk>
+LABEL Description "Container for running Centrifuge with default DBs, on Centos"
 
+# Run updates
+RUN yum -y update
+RUN yum clean all
+RUN yum install -y wget build-essential bash unzip python nano 
+
+#Download Centrifuge
+RUN wget ftp://ftp.ccb.jhu.edu/pub/infphilo/centrifuge/downloads/centrifuge-1.0.3-beta-Linux_x86_64.zip
+RUN unzip centrifuge-1.0.3-beta-Linux_x86_64.zip -d /
+RUN mv centrifuge-1.0.3-beta centrifuge
+RUN rm -f centrifuge-1.0.3-beta-Linux_x86_64.zip
+
+#Download precompile centrifuge indexes
+RUN wget ftp://ftp.ccb.jhu.edu/pub/infphilo/centrifuge/data/p+h+v.tar.gz
+RUN tar xvf p+h+v.tar.gz
+RUN rm -f p+h+v.tar.gz
